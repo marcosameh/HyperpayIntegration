@@ -58,5 +58,33 @@ namespace HyperPayIntegration.Services
             }
         }
 
+        public async Task<Result<PaymentStatusResponseDTO>> PaymentStatus(string checkoutId)
+        {
+            try
+            {
+                var apiUrl = $"{baseApiUrl}/v1/checkouts/{checkoutId}/payment";
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Add("Authorization", authorizationToken);
+
+                    var httpResponse = await httpClient.GetAsync(apiUrl);
+
+                    if (httpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        var errorMessage = $"Payment status check failed with status code {httpResponse.StatusCode}";
+                        return Result.Fail<PaymentStatusResponseDTO>(errorMessage);
+                    }
+
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var paymentStatusResponse = JsonConvert.DeserializeObject<PaymentStatusResponseDTO>(responseContent);
+                    return Result.Ok(paymentStatusResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"An error occurred during payment status check: {ex.Message}. Inner Exception: {ex.InnerException?.Message}";
+                return Result.Fail<PaymentStatusResponseDTO>(errorMessage);
+            }
+        }
     }
 }

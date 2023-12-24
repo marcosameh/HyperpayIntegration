@@ -22,6 +22,19 @@ namespace HyperPayIntegration.Endpoints
                     return Results.BadRequest(result.Error);
                 }
             });
+            app.MapPost("/hyperpay/paymentstatus", async (string checkoutId, IHyperPayService hyperPayService) =>
+            {
+                var result = await hyperPayService.PaymentStatus(checkoutId);
+
+                if (result.IsSuccess)
+                {
+                    return Results.Ok(result.Value);
+                }
+                else
+                {
+                    return Results.BadRequest(result.Error);
+                }
+            });
         }
     }
 }
