@@ -21,3 +21,4 @@ if (app.Environment.IsDevelopment())
 app.ConfigureHyperPayEndpoints();
 app.UseHttpsRedirection();
 
+app.Run();
