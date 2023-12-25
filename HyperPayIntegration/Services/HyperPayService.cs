@@ -62,7 +62,8 @@ namespace HyperPayIntegration.Services
         {
             try
             {
-                var apiUrl = $"{baseApiUrl}/v1/checkouts/{checkoutId}/payment";
+                string entityId = "entityId=8a8294174b7ecb28014b9699220015ca";
+                var apiUrl = $"{baseApiUrl}/v1/checkouts/{checkoutId}/payment?"+entityId;
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.DefaultRequestHeaders.Add("Authorization", authorizationToken);
